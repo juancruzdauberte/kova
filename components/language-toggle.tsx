@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function LanguageToggle() {
+export function LanguageToggle({ className }: { className?: string }) {
   const [language, setLanguage] = React.useState("es");
 
   return (
@@ -20,13 +20,13 @@ export function LanguageToggle() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full border-border/50 bg-transparent hover:bg-foreground/5 transition-all duration-300 hover:border-primary/50 hover:text-primary"
+          className={`rounded-full border-border/50 bg-transparent hover:bg-foreground/5 transition-all duration-300 hover:border-primary/50 hover:text-primary cursor-pointer ${className}`}
         >
           <Globe className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-white text-black">
         <DropdownMenuItem onClick={() => setLanguage("es")}>
           Español
         </DropdownMenuItem>

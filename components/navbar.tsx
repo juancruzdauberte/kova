@@ -26,6 +26,7 @@ export default function Navbar() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileListRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -53,31 +54,22 @@ export default function Navbar() {
       });
 
       /* Styled sticky navbar logic */
-      ScrollTrigger.create({
-        start: "top -20",
-        end: 99999,
-        toggleClass: "className", // placeholder, specific logic below
-        onEnter: () => {
-          gsap.to(navRef.current, {
-            className:
-              "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/10",
-            paddingBlock: "0.25rem", // Smaller padding on scroll
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            duration: 0.3,
-          });
-          gsap.to(logoRef.current, {
-            className: "h-12 w-auto sm:h-8",
-          });
+      /* Styled sticky navbar logic with Scrub */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          start: "top top",
+          end: "+=100",
+          scrub: true,
         },
-        onLeaveBack: () => {
-          gsap.to(navRef.current, {
-            className:
-              "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-            paddingBlock: "0.75rem", // Initial padding (smaller than before)
-            boxShadow: "none",
-            duration: 0.3,
-          });
-        },
+      });
+
+      tl.to(navRef.current, {
+        paddingBlock: "0.20rem",
+        backgroundColor: "rgba(var(--background), 0.8)",
+        backdropFilter: "blur(12px)",
+        borderBottomColor: "rgba(128, 128, 128, 0.2)",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        ease: "none",
       });
     }, navRef);
 
@@ -92,13 +84,15 @@ export default function Navbar() {
           duration: 0.5,
           ease: "power3.out",
         });
-        gsap.from(mobileMenuRef.current.querySelectorAll("a, button"), {
-          x: 50,
-          opacity: 0,
-          stagger: 0.1,
-          duration: 0.3,
-          delay: 0.2,
-        });
+        if (mobileListRef.current) {
+          gsap.from(mobileListRef.current.children, {
+            x: 50,
+            opacity: 0,
+            stagger: 0.1,
+            duration: 0.3,
+            delay: 0.2,
+          });
+        }
       } else {
         gsap.to(mobileMenuRef.current, {
           x: "100%",
@@ -113,7 +107,8 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 sm:py-4"
+        style={{ borderBottom: "1px solid transparent" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-12">
@@ -133,22 +128,24 @@ export default function Navbar() {
                   priority
                 />
 
-                {/* Text Logo - Light Mode */}
                 <Image
                   src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172123/KOVA.-BLACK_efgp2z.png"
                   alt="Kova"
                   width={100}
                   height={40}
-                  className="h-6 w-auto object-contain dark:hidden"
+                  className={`h-6 w-auto object-contain dark:hidden ${
+                    isMenuOpen && "hidden"
+                  }`}
                 />
 
-                {/* Text Logo - Dark Mode */}
                 <Image
                   src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172119/KOVA-WHITE_khctbl.png"
                   alt="Kova"
                   width={100}
                   height={40}
-                  className="h-6 w-auto object-contain hidden dark:block"
+                  className={`h-6 w-auto object-contain ${
+                    isMenuOpen ? "block" : "hidden dark:block"
+                  }`}
                 />
               </Link>
             </div>
@@ -160,7 +157,7 @@ export default function Navbar() {
                   key={index}
                   href={link.href}
                   onClick={(e) => handleScroll(e as any, link.href)}
-                  className="text-sm font-medium text-muted-foreground hover:text-accent-foreground transition-all duration-300 px-4 py-2 rounded-full hover:bg-accent hover:scale-105 active:scale-95"
+                  className={`text-sm font-medium text-muted-foreground hover:text-accent-foreground transition-all duration-300 px-4 py-2 rounded-full hover:bg-accent hover:scale-105 active:scale-95`}
                 >
                   {link.label}
                 </Link>
@@ -179,14 +176,14 @@ export default function Navbar() {
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Toggles removed from here */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+              className="md:hidden p-2 hover:text-primary transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 text-white" />
               ) : (
                 <Menu className="w-6 h-6" />
               )}
@@ -198,30 +195,25 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         ref={mobileMenuRef}
-        className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-background/95 backdrop-blur-lg border-l border-border z-40 md:hidden translate-x-full"
+        className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-background/95 backdrop-blur-lg border-l border-border z-40 md:hidden translate-x-full cursor-pointer"
       >
-        <div className="flex flex-col gap-6 p-8 pt-24">
+        <div ref={mobileListRef} className="flex flex-col gap-6 p-8 pt-24">
           {navLinks.map((link, index) => (
-            <a
+            <Link
               key={index}
               href={link.href}
               onClick={(e) => handleScroll(e, link.href)}
-              className="text-2xl font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+              className="text-2xl font-medium hover:text-primary transition-colors cursor-pointer text-white"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <div className="flex items-center gap-4 mt-4">
-            <LanguageToggle />
-            <ModeToggle />
+          <div className="flex items-center gap-4 mt-2">
+            <div className="text-white flex items-center gap-3">
+              <LanguageToggle className="border-white text-white hover:bg-white/20 hover:text-white hover:border-white" />
+              <ModeToggle className="border-white text-white hover:bg-white/20 hover:text-white hover:border-white" />
+            </div>
           </div>
-          <Button
-            size="lg"
-            onClick={(e) => handleScroll(e as any, "#contact")}
-            className="rounded-full w-full cursor-pointer"
-          >
-            Agendar Reunión
-          </Button>
         </div>
       </div>
 

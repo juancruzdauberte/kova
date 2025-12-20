@@ -79,8 +79,8 @@ export default function FAQSection() {
     >
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full" />
-        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[60%] bg-blue-600/5 blur-[120px] rounded-full" />
+        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-300/5 blur-[120px] rounded-full" />
+        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[60%] bg-green-500/5 dark:bg-green-300/5 blur-[120px] rounded-full" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -100,17 +100,17 @@ export default function FAQSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="group border border-border/50 bg-card/30 backdrop-blur-sm rounded-2xl overflow-hidden hover:border-primary/50 transition-colors duration-300"
+              className="group border border-border/50 bg-card/30 backdrop-blur-sm rounded-2xl overflow-hidden hover:border-emerald-500/30 dark:hover:border-emerald-400/30 transition-all duration-300"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between p-6 text-left"
+                className="w-full flex items-center justify-between p-6 text-left cursor-pointer"
                 aria-expanded={openIndex === index}
               >
-                <span className="text-lg sm:text-xl font-medium pr-8 group-hover:text-primary transition-colors">
+                <span className="text-lg sm:text-xl font-medium pr-8 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
                   {faq.question}
                 </span>
-                <span className="shrink-0 text-primary">
+                <span className="shrink-0 text-emerald-500 dark:text-emerald-400">
                   {openIndex === index ? (
                     <Minus className="w-6 h-6" />
                   ) : (

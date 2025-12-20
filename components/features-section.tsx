@@ -148,7 +148,7 @@ export default function FeaturesSection() {
               className="shrink-0 w-[320px] lg:w-[400px] h-[400px] lg:h-[500px] p-6 lg:p-8 bg-card border-border hover:border-primary transition-colors duration-300 relative overflow-hidden group"
             >
               <div
-                className={`absolute inset-0 bg-linear-to-br from-emerald-500 to-green-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                className={`absolute inset-0 bg-linear-to-br from-emerald-500 to-green-500 dark:from-emerald-300 dark:to-green-300 opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
               />
               <div className="relative z-10 h-full flex flex-col">
                 <div className="w-14 h-14 lg:w-16 lg:h-16 mb-4 lg:mb-6 rounded-2xl bg-primary/10 flex items-center justify-center">
