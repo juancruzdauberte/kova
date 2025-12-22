@@ -1,19 +1,79 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const formSchema = z.object({
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+  email: z.string().email("Email inválido"),
+  phone: z.string().min(6, "Número de teléfono inválido"),
+  message: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export default function CTASection() {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const bgShapeRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data: FormValues) => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al enviar el mensaje");
+      }
+
+      toast.success("¡Mensaje enviado con éxito!", {
+        description: "Nos pondremos en contacto contigo pronto.",
+      });
+      reset();
+    } catch (error) {
+      toast.error("Hubo un error al enviar el mensaje", {
+        description: "Por favor, inténtalo de nuevo más tarde.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -51,18 +111,6 @@ export default function CTASection() {
         ease: "power2.out",
         scrollTrigger: {
           trigger: titleRef.current,
-          start: "top 75%",
-        },
-      });
-
-      gsap.from(formRef.current?.children || [], {
-        x: 50,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: formRef.current,
           start: "top 75%",
         },
       });
@@ -115,37 +163,92 @@ export default function CTASection() {
               ref={titleRef}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-balance"
             >
-              Únete a la revolución
+              Hablemos de tu proyecto
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-balance leading-relaxed max-w-2xl mx-auto px-4">
-              Sé parte de la plataforma que está transformando la forma en que
-              las marcas se conectan con los jugadores.
+              Cuéntanos qué necesitas y diseñaremos la solución perfecta para
+              ti.
             </p>
           </div>
 
           <form
-            ref={formRef}
+            onSubmit={handleSubmit(onSubmit)}
             className="space-y-4 sm:space-y-6 max-w-md mx-auto"
           >
-            <Input
-              type="text"
-              placeholder="Tu nombre"
-              className="h-12 sm:h-14 text-base sm:text-lg bg-background/50 backdrop-blur-sm border-2 rounded-xl"
+            <div>
+              <Input
+                {...register("name")}
+                type="text"
+                placeholder="Tu nombre"
+                className="h-12 sm:h-14 text-base sm:text-lg bg-background/50 backdrop-blur-sm border-2 rounded-xl"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1 ml-1">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Input
+                {...register("email")}
+                type="email"
+                placeholder="tu@email.com"
+                className="h-12 sm:h-14 text-base sm:text-lg bg-background/50 backdrop-blur-sm border-2 rounded-xl"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1 ml-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <div className="phone-input-container">
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <PhoneInput
+                      placeholder="Número de teléfono"
+                      value={field.value}
+                      onChange={field.onChange}
+                      defaultCountry="AR"
+                      international
+                      withCountryCallingCode
+                      className="flex h-12 sm:h-14 w-full rounded-xl border-2 border-input bg-background/50 backdrop-blur-sm px-3 py-2 text-base sm:text-lg ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>.PhoneInputCountry]:mr-3 [&>.PhoneInputCountry]:ml-1 [&>.PhoneInputInput]:bg-transparent [&>.PhoneInputInput]:outline-none"
+                    />
+                  )}
+                />
+              </div>
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1 ml-1">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
+
+            <Textarea
+              {...register("message")}
+              placeholder="¿En qué podemos ayudarte?"
+              className="min-h-[120px] text-base sm:text-lg bg-background/50 backdrop-blur-sm border-2 rounded-xl resize-none"
             />
-            <Input
-              type="email"
-              placeholder="tu@email.com"
-              className="h-12 sm:h-14 text-base sm:text-lg bg-background/50 backdrop-blur-sm border-2 rounded-xl"
-            />
+
             <Button
               size="lg"
-              className="w-full text-base sm:text-lg h-12 sm:h-14 rounded-xl"
+              disabled={isSubmitting}
+              className="w-full text-base sm:text-lg h-12 sm:h-14 rounded-xl relative overflow-hidden group bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-emerald-400/20 cursor-pointer"
             >
-              Comenzar gratis
+              <span className="relative z-10 font-bold tracking-wide flex items-center justify-center gap-2">
+                {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
+              </span>
+              {!isSubmitting && (
+                <>
+                  <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/30 to-transparent z-0" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 to-transparent blur-md" />
+                </>
+              )}
             </Button>
-            <p className="text-xs sm:text-sm text-muted-foreground text-center px-2">
-              Sin tarjeta de crédito. Comienza en minutos.
-            </p>
           </form>
         </div>
       </div>

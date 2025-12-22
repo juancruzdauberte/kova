@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   },
 };
 
+import FloatingWhatsApp from "@/components/floating-whatsapp";
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,6 +51,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <FloatingWhatsApp />
+          <Toaster />
         </ThemeProvider>
         <Analytics />
       </body>
