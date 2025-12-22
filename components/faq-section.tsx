@@ -75,6 +75,7 @@ export default function FAQSection() {
   return (
     <section
       ref={sectionRef}
+      id="faq"
       className="py-24 sm:py-32 bg-background relative overflow-hidden"
     >
       {/* Background Gradients */}

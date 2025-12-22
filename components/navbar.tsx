@@ -15,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const navLinks = [
   { label: "Servicios", href: "#features" },
-  { label: "Nosotros", href: "#stats" },
+  { label: "Nosotros", href: "#about" },
   { label: "Casos de Éxito", href: "#features" },
   { label: "Contacto", href: "#contact" },
 ];

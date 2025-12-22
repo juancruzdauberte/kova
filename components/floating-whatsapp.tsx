@@ -32,7 +32,7 @@ export default function FloatingWhatsApp() {
 
   return (
     <Link
-      href="https://wa.me/5493329305210"
+      href="https://wa.me/5493329305210?text=Hola! Quiero más información sobre los servicios que ofrecen."
       target="_blank"
       rel="noopener noreferrer"
       ref={buttonRef}

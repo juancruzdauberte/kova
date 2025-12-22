@@ -155,6 +155,7 @@ export default function AboutSection() {
   return (
     <section
       ref={sectionRef}
+      id="about"
       className="py-24 sm:py-32 bg-background relative overflow-hidden"
     >
       <div className="container mx-auto px-4">
