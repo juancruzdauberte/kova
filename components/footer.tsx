@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollToPlugin);
 export default function Footer() {
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
   ) => {
     e.preventDefault();
     const target = document.querySelector(href);
@@ -30,7 +30,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8 lg:pr-16 lg:pl-16">
           <div className="flex flex-col items-center md:items-start">
             <Image
-              src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172123/KOVA.-BLACK_efgp2z.png"
+              src="kova_black.png"
               alt="Kova"
               width={160}
               height={80}
@@ -38,14 +38,15 @@ export default function Footer() {
             />
 
             <Image
-              src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172119/KOVA-WHITE_khctbl.png"
+              src="kova_white.png"
               alt="Kova"
               width={160}
               height={80}
               className="h-12 w-auto object-contain hidden dark:block"
             />
             <p className="text-muted-foreground text-sm ml-1 mt-2">
-              Conectando marcas con gamers de todo el mundo.
+              Transformamos ideas en soluciones digitales robustas y escalables
+              para potenciar negocios.
             </p>
 
             <div className="flex gap-4 mt-6 ml-1">

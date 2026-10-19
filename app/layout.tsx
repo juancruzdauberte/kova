@@ -9,28 +9,10 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kova",
+  title: "KOVA",
   description:
-    "La plataforma que conecta marcas con millones de jugadores a través de recompensas en el juego.",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "https://res.cloudinary.com/dttpgbmdx/image/upload/v1766169973/kova_logo_csc7lj.ico",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "https://res.cloudinary.com/dttpgbmdx/image/upload/v1766169973/kova_logo_csc7lj.ico",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "https://res.cloudinary.com/dttpgbmdx/image/upload/v1766169973/kova_logo_csc7lj.ico",
-        type: "image/svg+xml",
-      },
-    ],
-    apple:
-      "https://res.cloudinary.com/dttpgbmdx/image/upload/v1766169973/kova_logo_csc7lj.ico",
-  },
+    "Transformamos ideas en productos digitales de alto impacto. Desarrollo web a medida, software escalable y optimización de procesos para potenciar tu negocio.",
+  applicationName: "KOVA",
 };
 
 import FloatingWhatsApp from "@/components/floating-whatsapp";

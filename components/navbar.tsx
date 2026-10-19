@@ -30,7 +30,7 @@ export default function Navbar() {
 
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
   ) => {
     e.preventDefault();
     const target = document.querySelector(href);
@@ -116,11 +116,11 @@ export default function Navbar() {
             <div ref={logoRef} className="shrink-0 flex items-center">
               <Link
                 href="#home"
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1 hover:opacity-80 transition-opacity"
                 onClick={(e) => handleScroll(e as any, "#home")}
               >
                 <Image
-                  src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766169972/kova_logo_kq8vkf.png"
+                  src="kova_logo.png"
                   alt="Kova Icon"
                   width={50}
                   height={50}
@@ -129,7 +129,7 @@ export default function Navbar() {
                 />
 
                 <Image
-                  src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172123/KOVA.-BLACK_efgp2z.png"
+                  src="kova_black.png"
                   alt="Kova"
                   width={100}
                   height={40}
@@ -139,7 +139,7 @@ export default function Navbar() {
                 />
 
                 <Image
-                  src="https://res.cloudinary.com/dttpgbmdx/image/upload/v1766172119/KOVA-WHITE_khctbl.png"
+                  src="kova_white.png"
                   alt="Kova"
                   width={100}
                   height={40}
